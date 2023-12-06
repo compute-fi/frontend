@@ -8,11 +8,6 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-import { styled } from '@mui/material/styles';
-import Button, { ButtonProps } from '@mui/material/Button';
-import { purple } from '@mui/material/colors';
-import Link from 'next/link';
-import { Typography, colors } from '@mui/material';
 
 interface Column {
   id: 'reqDate' | 'computeID' | 'status' | 'computeTime' | 'fee' | 'tx' | 'log';
@@ -23,36 +18,36 @@ interface Column {
 }
 
 const columns: Column[] = [
-  { id: 'reqDate', label: 'Request\u00a0Date', minWidth: 170 },
-  { id: 'computeID', label: 'Compute\u00a0ID', minWidth: 100 },
+  { id: 'reqDate', label: 'Request\u00a0Date', minWidth: 100 },
+  { id: 'computeID', label: 'Compute\u00a0ID', minWidth: 200 },
   {
     id: 'status',
-    label: 'Population',
-    minWidth: 170
+    label: 'Status',
+    minWidth: 50
   },
   {
     id: 'computeTime',
     label: 'Total\u00a0Compute\u00a0Time',
-    minWidth: 170,
+    minWidth: 50,
     align: 'right',
     format: (value: number) => value.toFixed(2),
   },
   {
     id: 'fee',
     label: 'Fee(eth)',
-    minWidth: 170,
+    minWidth: 50,
     align: 'right',
     format: (value: number) => value.toFixed(2),
   },
   {
     id: 'tx',
     label: 'Transaction\u00a0URL',
-    minWidth: 170
+    minWidth: 50
   },
   {
     id: 'log',
     label: 'Compute\u00a0Log',
-    minWidth: 170
+    minWidth: 50
   },
 ];
 
@@ -96,14 +91,6 @@ const rows = [
   createData('Canada', 'CAD', "1324171354", 3287263,1,"2","3"),
 ];
 
-const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  color: theme.palette.getContrastText(purple[500]),
-  backgroundColor: purple[500],
-  '&:hover': {
-    backgroundColor: purple[700],
-  },
-}));
-
 export default function ComputeTaskTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(4);
@@ -119,17 +106,7 @@ export default function ComputeTaskTable() {
 
   return (
     <>
-    <ColorButton variant="contained">
-    <Link href="form" style={{ textDecoration: 'none' }}>
-    <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              // sx={{ m: "15px 0 5px 20px" }}
-            >
-              Create Compute Task
-            </Typography>
-      </Link>
-    </ColorButton>
+
     <Paper sx={{ width: '100%' }}>
 
       <TableContainer sx={{ maxHeight: 440 }}>

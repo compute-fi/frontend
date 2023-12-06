@@ -11,7 +11,7 @@ import { abi } from '../contracts/compute-contract-abi';
 import { useDebounce } from './useDebounce'
 
 const contractConfig = {
-  address: '0xfF9aa21FC6aA2fEae61cC776f3F2B23f0Ad5dE4e',
+  address: '0x2f5789DC7615a532881ed67D6731dC54A5e8FE77',
   abi,
 } as const;
 
@@ -83,7 +83,7 @@ return(
         <div>
           Successfully initiated. Please refresh ComputeID! 
           <div>
-            <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
+            <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan </a>{data?.hash}
           </div>
         </div>
       )}
