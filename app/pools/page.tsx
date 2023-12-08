@@ -10,19 +10,29 @@ import {
   Select,
   Typography,
   useTheme,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
 } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Header from "../components/Header";
 import { tokens } from "../theme";
 import React from "react";
 import PoolItem from "../components/PoolItem";
+import { pool } from "@/constants";
+import PoolModal from "../components/PoolModal";
 
-interface Token {
+export interface Token {
   name: string;
-  icon: string;
+  icon: React.FC<React.SVGProps<SVGSVGElement>> | string | undefined | null;
   usdValue: number;
   amount: number;
   category: string;
+  address: string;
+  tvl: string;
+  maxApr: string;
+  userLiquidity: number;
 }
 
 export interface Pool {
@@ -38,36 +48,35 @@ export type Filter = "ALL" | "MY";
 
 interface PoolsProps {
   pools: Pool[];
-  onAddLiquidityClick: (pool: Pool) => void;
-  onShowDetailsClick: (pool: Pool) => void;
+  onAddLiquidityClick: (token: Token) => void;
   filter: Filter;
   sort: Sort;
   onSortSelect: (by: Sort) => void;
   onFilterClick: (by: Filter) => void;
 }
 
-const pool = {
-  tokens: [
-    {
-      name: "USDT",
-      icon: "./cTokenUSDT.svg",
-      usdValue: 0.0,
-      amount: 0.0,
-      category: "USDT",
-    },
-    {
-      name: "ETH",
-      icon: "./eth.png",
-      usdValue: 0.0,
-      amount: 0.0,
-      category: "ETH",
-    },
-  ],
-  tvl: "$0.00",
-  maxApr: "0.00%",
-  userLiquidity: 0.0,
-  poolAddress: "",
-};
+// const pool = {
+//   tokens: [
+//     {
+//       name: "USDT",
+//       icon: "./cTokenUSDT.svg",
+//       usdValue: 0.0,
+//       amount: 0.0,
+//       category: "USDT",
+//     },
+//     {
+//       name: "ETH",
+//       icon: "./eth.png",
+//       usdValue: 0.0,
+//       amount: 0.0,
+//       category: "ETH",
+//     },
+//   ],
+//   tvl: "$0.00",
+//   maxApr: "0.00%",
+//   userLiquidity: 0.0,
+//   poolAddress: "",
+// };
 
 const FilterButton = ({
   label,
@@ -106,19 +115,16 @@ const FilterButton = ({
   );
 };
 
-const Pools = ({
-  pools,
-  onAddLiquidityClick,
-  onShowDetailsClick,
-  filter,
-  sort,
-  onSortSelect,
-  onFilterClick,
-}: PoolsProps) => {
+const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
   const [searchValue, setSearchValue] = React.useState("");
+  const [open, setOpen] = React.useState(false);
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const onAddLiquidityClick = (token: Token) => {
+    setOpen(true);
+  };
 
   return (
     <Box m="20px">
@@ -239,12 +245,40 @@ const Pools = ({
           </Grid>
         </Grid>
         <Grid container spacing={2}>
-          <PoolItem
-            filter={filter}
-            onAddLiquidityClick={() => onAddLiquidityClick(pool)}
-            onShowDetailsClick={onShowDetailsClick}
-            pool={pool}
-          />
+          {pool?.tokens?.map(token => (
+            <PoolItem
+              key={token.address}
+              filter={filter}
+              onAddLiquidityClick={onAddLiquidityClick}
+              token={token}
+            />
+          ))}
+          <Dialog
+            open={open}
+            onClose={() => setOpen(false)}
+            sx={{
+              "& .MuiDialog-paper": {
+                background: `${
+                  theme.palette.mode == "dark"
+                    ? `${colors.primary[600]}`
+                    : `${colors.primary[700]}`
+                }`,
+              },
+            }}
+          >
+            <DialogContent>
+              <PoolModal />
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => setOpen(false)}
+                variant="outlined"
+                color="secondary"
+              >
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Grid>
       </Box>
     </Box>

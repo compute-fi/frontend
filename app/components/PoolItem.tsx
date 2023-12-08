@@ -14,7 +14,9 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Header from "../components/Header";
 import { tokens } from "../theme";
 import React from "react";
-import { Pool, Filter } from "../pools/page";
+import { Pool, Filter, Token } from "../pools/page";
+import { pool } from "@/constants";
+import Image from "next/image";
 
 export const descriptionHeader = {
   color: "var(--content-medium-emphasis, rgba(255, 255, 255, 0.74))",
@@ -37,19 +39,22 @@ export const descriptionContent = {
   textAlign: "right",
 };
 
+const onAddLiquidityClick = (token: Token) => {
+  console.log(token);
+};
+
 const PoolItem = ({
-  pool,
+  token,
   onAddLiquidityClick,
-  onShowDetailsClick,
   filter,
 }: {
-  pool: Pool;
+  token: Token;
   filter: Filter;
-  onAddLiquidityClick: (pool: Pool) => void;
-  onShowDetailsClick: (pool: Pool) => void;
+  onAddLiquidityClick: (token: Token) => void;
 }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   return (
     <Grid item xs={6} md={3}>
       <Box
@@ -71,15 +76,11 @@ const PoolItem = ({
             marginLeft: "5px",
           }}
         >
-          <Box
-            component={"img"}
-            src={pool.tokens[0].icon}
-            sx={{
-              width: {
-                xs: "48px",
-                md: "64px",
-              },
-            }}
+          <Image
+            src={token.icon as string}
+            width={50}
+            height={50}
+            alt={token.name}
           />
         </Box>
         <Typography
@@ -93,7 +94,7 @@ const PoolItem = ({
             },
           }}
         >
-          {`${pool.tokens[0].name} `}
+          {`${token.name} `}
         </Typography>
 
         <Grid
@@ -107,20 +108,20 @@ const PoolItem = ({
             <Typography sx={descriptionHeader}>TVL</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography sx={descriptionContent}>{pool.tvl}</Typography>
+            <Typography sx={descriptionContent}>{token.tvl}</Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography sx={descriptionHeader}>Max APR</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography sx={descriptionContent}>{pool.maxApr}</Typography>
+            <Typography sx={descriptionContent}>{token.maxApr}</Typography>
           </Grid>
           <Grid item xs={6} display={filter == "MY" ? "block" : "none"}>
             <Typography sx={descriptionHeader}>My Liquidity</Typography>
           </Grid>
           <Grid item xs={6} display={filter == "MY" ? "block" : "none"}>
             <Typography sx={descriptionContent}>
-              {pool.userLiquidity}
+              {token.userLiquidity}
             </Typography>
           </Grid>
         </Grid>
@@ -128,7 +129,7 @@ const PoolItem = ({
         <Grid container spacing={1}>
           <Grid item xs={12} md={7} sx={{}}>
             <Button
-              onClick={() => onAddLiquidityClick(pool)}
+              onClick={() => onAddLiquidityClick(token)}
               sx={{
                 padding: "12px 16px",
                 width: "170%",
@@ -136,6 +137,8 @@ const PoolItem = ({
                 justifyContent: "center",
                 alignItems: "center",
                 margin: "0 auto",
+                fontSize: "14px",
+                fontWeight: "bold",
               }}
               variant="contained"
               color="secondary"
