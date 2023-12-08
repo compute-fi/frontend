@@ -16,7 +16,7 @@ const contractConfig = {
 import NFTlevel from "./NFTlevel";
 import ComputeBalance from "./ComputeBalance";
 import NFTimage from "./NFTimage";
-import { Grid } from '@mui/material';
+import { Button, Grid, Link } from '@mui/material';
 import { gridSpacing } from './store/constant';
 
 async function getImageUrl(url: string) {
@@ -85,6 +85,7 @@ const PageHead = () => {
     
     return (
       <>
+      
         <Grid item xs={8}>
           <Grid container spacing={gridSpacing}>
             <Grid item lg={4} md={6} sm={6} xs={12}>
@@ -98,6 +99,7 @@ const PageHead = () => {
             </Grid>
           </Grid>
         </Grid>
+        
       </>
     );
   };
