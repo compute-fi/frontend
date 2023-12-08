@@ -12,26 +12,22 @@ import { tokens } from "../theme";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import { TokenBox } from "./TokenBox";
-import { Token } from "./Token";
+// import { Token } from "./Token";
+import { Token } from "../pools/page";
 import { Button } from "./Button";
+import Image from "next/image";
 
 type Data = number[];
 
 interface LabTabProps {
-  tokenA: Token;
-  tokenB: Token;
-  liquidityA: number;
-  liquidityB: number;
-  liquidityToken: Token;
-  onAddLiquidity: (tokenAAmount: number, tokenBAmount: number) => void;
+  token: Token;
+  liquidityToken: number;
+  onAddLiquidity: (tokenAmount: number) => void;
   onRemoveLiquidity: (liquidityTokenAmount: number) => void;
 }
 
 const LabTabs = ({
-  tokenA,
-  tokenB,
-  liquidityA,
-  liquidityB,
+  token,
   liquidityToken,
   onAddLiquidity,
   onRemoveLiquidity,
@@ -39,25 +35,7 @@ const LabTabs = ({
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [value, setValue] = useState("1");
-  const [tokenAValue, setTokenAValue] = useState<string | undefined>(undefined);
-  const [tokenBValue, setTokenBValue] = useState<string | undefined>(undefined);
-  const [tokenCValue, setTokenCValue] = useState<string | undefined>(undefined);
-
-  const liquidityRatio = liquidityA / liquidityB;
-
-  const keepRatioA = (val: string) => {
-    setTokenAValue(val);
-
-    const valB = Number(val) / liquidityRatio;
-    setTokenBValue(valB.toFixed(4));
-  };
-
-  const keepRatioB = (val: string) => {
-    setTokenBValue(val);
-
-    const valA = Number(val) * liquidityRatio;
-    setTokenAValue(valA.toFixed(4));
-  };
+  const [tokenValue, setTokenValue] = useState<string | undefined>(undefined);
 
   const buttonStyles = {
     display: "flex",
@@ -74,6 +52,7 @@ const LabTabs = ({
       background: `${colors.greenAccent[600]}`,
       boxShadow: "none",
     },
+    width: "200px",
   };
 
   return (
@@ -104,16 +83,14 @@ const LabTabs = ({
         </Box>
         <TabPanel sx={{ padding: "0", mt: "1rem" }} value="1">
           <TokenBox
-            value={tokenAValue}
-            onChange={val => keepRatioA(val)}
-            token={tokenA}
+            value={tokenValue}
+            onChange={() => {}}
+            token={token}
             hideDropdownButton={true}
           />
 
           <Button
-            onClick={() =>
-              onAddLiquidity(Number(tokenAValue), Number(tokenBValue))
-            }
+            onClick={() => onAddLiquidity(Number(tokenValue))}
             sx={{ mt: "0.5rem" }}
             fullWidth
             // @ts-ignore
@@ -124,13 +101,13 @@ const LabTabs = ({
         </TabPanel>
         <TabPanel sx={{ padding: "0", mt: "1rem" }} value="2">
           <TokenBox
-            onChange={val => setTokenCValue(val)}
-            value={tokenCValue}
-            token={liquidityToken}
+            onChange={() => {}}
+            value={tokenValue}
+            token={token}
             hideDropdownButton={true}
           />
           <Button
-            onClick={() => onRemoveLiquidity(Number(tokenCValue))}
+            onClick={() => onRemoveLiquidity(Number(tokenValue))}
             sx={{ mt: "0.5rem" }}
             fullWidth
             // @ts-ignore
@@ -145,23 +122,15 @@ const LabTabs = ({
 };
 
 interface PoolLiquidityProps {
-  tokenA: Token;
-  tokenB: Token;
-  liquidityToken: Token;
-  poolHistory: Data[];
-  liquidityA: number;
-  liquidityB: number;
-  onAddLiquidity: (tokenAAmount: number, tokenBAmount: number) => void;
+  token: Token;
+  liquidityToken: number;
+  onAddLiquidity: (tokenAmount: number) => void;
   onRemoveLiquidity: (liquidityTokenAmount: number) => void;
 }
 
-const PoolLiquidity = ({
-  tokenA,
-  tokenB,
-  liquidityA,
-  liquidityB,
+const PoolModal = ({
+  token,
   liquidityToken,
-  poolHistory,
   onAddLiquidity,
   onRemoveLiquidity,
 }: PoolLiquidityProps) => {
@@ -182,65 +151,46 @@ const PoolLiquidity = ({
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         <Box sx={{ padding: "1.5rem" }}>
-          <Box
-            sx={{ height: "4rem", width: "4rem" }}
-            component="img"
-            src={tokenA?.icon}
-          />
-          <Box
-            sx={{ ml: -1, height: "4rem", width: "4rem" }}
-            component="img"
-            src={tokenB?.icon}
+          <Image
+            src={token?.icon as string}
+            width={50}
+            height={50}
+            alt={token?.name}
           />
         </Box>
       </Box>
       <Divider />
       <Box>
         <Grid container>
-          <Grid item xs={4}>
+          <Grid item xs={12}>
             <Box
               sx={{
+                marginTop: "1rem",
                 display: "flex",
                 justifyContent: "center",
+                textAlign: "center",
                 alignItems: "center",
                 flexDirection: "column",
               }}
             >
               <Box>
-                <Typography sx={{ fontSize: "0.875rem", opacity: 0.7 }}>
-                  {tokenA?.name}
+                <Typography
+                  sx={{
+                    fontSize: "0.875rem",
+                    opacity: 0.7,
+                  }}
+                >
+                  {token?.name}
                 </Typography>
                 <Typography sx={{ fontWeight: 700, fontSize: "1.125rem" }}>
-                  {liquidityA}
-                </Typography>
-              </Box>
-            </Box>
-          </Grid>
-          <Grid item xs={4}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <Box>
-                <Typography sx={{ fontSize: "0.875rem", opacity: 0.7 }}>
-                  {tokenB?.name}
-                </Typography>
-                <Typography sx={{ fontWeight: 700, fontSize: "1.125rem" }}>
-                  {liquidityB}
+                  {liquidityToken}
                 </Typography>
               </Box>
             </Box>
           </Grid>
         </Grid>
         <LabTabs
-          tokenA={tokenA}
-          tokenB={tokenB}
-          liquidityA={liquidityA}
-          liquidityB={liquidityB}
+          token={token}
           liquidityToken={liquidityToken}
           onAddLiquidity={onAddLiquidity}
           onRemoveLiquidity={onRemoveLiquidity}
@@ -250,4 +200,4 @@ const PoolLiquidity = ({
   );
 };
 
-export default PoolLiquidity;
+export default PoolModal;

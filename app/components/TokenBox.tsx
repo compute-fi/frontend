@@ -10,14 +10,16 @@ import {
 } from "@mui/material";
 import React from "react";
 import { tokens } from "../theme";
+import { Token } from "../pools/page";
+import Image from "next/image";
 
-interface Token {
-  name: string;
-  icon: string;
-  usdValue: number;
-  amount: number;
-  category: string;
-}
+// interface Token {
+//   name: string;
+//   icon: string;
+//   usdValue: number;
+//   amount: number;
+//   category: string;
+// }
 
 interface TokenBoxProps {
   token: Token;
@@ -59,13 +61,11 @@ const AssetButton = ({
         pointerEvents: hideDropdownButton ? "none" : "auto",
       }}
     >
-      <Box
-        component={"img"}
-        src={token?.icon}
-        sx={{
-          maxWidth: "24px",
-          marginRight: "8px",
-        }}
+      <Image
+        src={token?.icon as string}
+        width={24}
+        height={24}
+        alt={token?.name}
       />
       {token?.name}
       <Box
@@ -151,6 +151,7 @@ const TokenBox = ({
                   "-webkit-appearance": "none",
                   margin: 0,
                 },
+                width: "100%",
               }}
             />
           )}

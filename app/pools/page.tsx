@@ -117,12 +117,14 @@ const FilterButton = ({
 
 const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
   const [searchValue, setSearchValue] = React.useState("");
+  const [selectedToken, setSelectedToken] = React.useState<Token | null>(null);
   const [open, setOpen] = React.useState(false);
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const onAddLiquidityClick = (token: Token) => {
+    setSelectedToken(token);
     setOpen(true);
   };
 
@@ -255,7 +257,10 @@ const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
           ))}
           <Dialog
             open={open}
-            onClose={() => setOpen(false)}
+            onClose={() => {
+              setOpen(false);
+              setSelectedToken(null);
+            }}
             sx={{
               "& .MuiDialog-paper": {
                 background: `${
@@ -267,7 +272,12 @@ const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
             }}
           >
             <DialogContent>
-              <PoolModal />
+              <PoolModal
+                token={selectedToken as Token}
+                liquidityToken={0}
+                onAddLiquidity={() => {}}
+                onRemoveLiquidity={() => {}}
+              />
             </DialogContent>
             <DialogActions>
               <Button
