@@ -68,7 +68,6 @@ export const pool: PoolType = {
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: ERC20ABI,
-      contractName: "compoundUSDT",
     },
     {
       name: "COMP",
@@ -83,7 +82,6 @@ export const pool: PoolType = {
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: ERC20ABI,
-      contractName: "compoundCOMP",
     },
     {
       name: "ETH",
@@ -98,7 +96,6 @@ export const pool: PoolType = {
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: WETHABI,
-      contractName: "compoundETH",
     },
     {
       name: "DAI",
@@ -113,7 +110,6 @@ export const pool: PoolType = {
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: ERC20ABI,
-      contractName: "compoundDAI",
     },
     {
       name: "UNI",
@@ -128,7 +124,6 @@ export const pool: PoolType = {
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: ERC20ABI,
-      contractName: "compoundUNI",
     },
     {
       name: "stETH",
@@ -143,7 +138,6 @@ export const pool: PoolType = {
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: WETHABI,
-      contractName: "lido",
     },
   ],
 };

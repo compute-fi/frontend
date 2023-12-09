@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Header from "../components/Header";
+import { TokenType as Token } from "@/constants";
 import { tokens } from "../theme";
 import React from "react";
 import PoolItem from "../components/PoolItem";
@@ -27,17 +28,17 @@ import { useAccount, useConfig } from "wagmi";
 import { getTokenBalance } from "@/services/ContractService";
 import { ethers } from "ethers";
 
-export interface Token {
-  name: string;
-  icon: React.FC<React.SVGProps<SVGSVGElement>> | string | undefined | null;
-  usdValue: number;
-  amount: number;
-  category: string;
-  address: string;
-  tvl: string;
-  maxApr: string;
-  userLiquidity: number;
-}
+// export interface Token {
+//   name: string;
+//   icon: React.FC<React.SVGProps<SVGSVGElement>> | string | undefined | null;
+//   usdValue: number;
+//   amount: number;
+//   category: string;
+//   address: string;
+//   tvl: string;
+//   maxApr: string;
+//   userLiquidity: number;
+// }
 
 export interface Pool {
   tokens: Token[];

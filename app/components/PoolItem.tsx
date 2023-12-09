@@ -14,7 +14,8 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Header from "../components/Header";
 import { tokens } from "../theme";
 import React from "react";
-import { Pool, Filter, Token } from "../pools/page";
+import { Pool, Filter } from "../pools/page";
+import { TokenType as Token } from "@/constants";
 import { pool } from "@/constants";
 import Image from "next/image";
 

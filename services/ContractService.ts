@@ -12,6 +12,16 @@ import {
 } from "../constants";
 import AccountService from "./AccountService";
 
+// Map token names from pool to contract names
+const tokenToContractMapping: Record<string, any> = {
+  USDT: "compoundUSDT",
+  DAI: "compoundDAI",
+  ETH: "compoundETH",
+  UNI: "compoundUNI",
+  COMP: "compoundCOMP",
+  stETH: "lido",
+};
+
 export const getPool = (poolName: string) => {
   return new ethers.Contract(
     contracts[poolName].address,
@@ -39,21 +49,19 @@ export const getTokenBalance = async (account: string, tokenName: string) => {
 };
 
 export const getContract = (tokenName: string) => {
-  const token = pool.tokens.find(token => token.name === tokenName);
-
-  if (!token) {
-    throw new Error(`Contract ${tokenName} not found`);
-  }
-
-  const contractName = Object.keys(contracts).find(
-    contract => contracts[contract].address === token.address
-  );
+  const contractName = tokenToContractMapping[tokenName];
 
   if (!contractName) {
     throw new Error(`Contract ${tokenName} not found`);
   }
 
-  return contractName;
+  const selectedContract = contracts[contractName];
+
+  if (!selectedContract) {
+    throw new Error(`Contract ${tokenName} not found`);
+  }
+
+  return selectedContract;
 };
 
 export const approveToken = async (
@@ -85,17 +93,28 @@ export const getTokenDecimals = async (tokenName: string) => {
 };
 
 export const depositToken = async (
-  account: string,
   tokenName: string,
-  amount: ethers.BigNumberish,
-  contract: string
+  amount: string,
+  address: string
 ) => {
-  let token = getToken(tokenName);
-  let contractName = getContract(contract);
+  const selectedToken = getToken(tokenName);
 
-  if (!contractName || !token) {
-    throw new Error("Contract or token not found");
+  if (!selectedToken) {
+    throw new Error(`Token ${tokenName} not found`);
   }
 
-  contractName.deposit(amount, account);
+  const contract = getContract(tokenName);
+
+  if (!contract) {
+    throw new Error(`Contract ${tokenName} not found`);
+  }
+
+  const contractInstance = new ethers.Contract(
+    contract.address,
+    contract.abi,
+    AccountService.getProvider()
+  );
+
+  const tx = await contractInstance.deposit(amount, address);
+  return tx;
 };

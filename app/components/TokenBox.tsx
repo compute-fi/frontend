@@ -10,7 +10,8 @@ import {
 } from "@mui/material";
 import React from "react";
 import { tokens } from "../theme";
-import { Token } from "../pools/page";
+// import { Token } from "../pools/page";
+import { TokenType as Token } from "@/constants";
 import Image from "next/image";
 
 // interface Token {
@@ -67,6 +68,7 @@ const AssetButton = ({
         height={24}
         alt={token?.name}
       />
+      &nbsp;
       {token?.name}
     </Button>
   );
@@ -109,7 +111,7 @@ const TokenBox = ({
               disabled={disabled}
               value={value}
               onChange={e => {
-                onChange(e.target.value);
+                onChange(String(e.target.value));
                 setUsdPrice(Number(e.target.value) * Number(token?.usdValue));
               }}
               inputProps={{ min: 0, max: token?.amount }}
@@ -198,7 +200,7 @@ const TokenBox = ({
           </Typography>
           <Button
             onClick={() => {
-              onChange(token?.amount.toString());
+              onChange(String(token?.amount));
               setUsdPrice(token?.amount * Number(token.usdValue));
             }}
             sx={{

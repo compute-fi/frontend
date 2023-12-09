@@ -13,7 +13,8 @@ import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import { TokenBox } from "./TokenBox";
 // import { Token } from "./Token";
-import { Token } from "../pools/page";
+// import { Token } from "../pools/page";
+import { TokenType as Token } from "@/constants";
 import { Button } from "./Button";
 import Image from "next/image";
 import { useAccount } from "wagmi";
@@ -23,10 +24,9 @@ import {
   approveToken,
   getToken,
   getTokenDecimals,
+  getContract,
 } from "@/services/ContractService";
-import { contracts } from "@/constants";
-import { ethers } from "ethers";
-import { getContract } from "viem";
+import { BigNumberish, ethers, parseUnits } from "ethers";
 
 type Data = number[];
 
@@ -67,35 +67,32 @@ const LabTabs = ({
     width: "200px",
   };
 
-  const handleAddLiquidity = async (tokenAmount: number) => {
+  const handleAddLiquidity = async (tokenAmount: string) => {
     try {
-      const contractName = token.name;
-      console.log("contractName", contractName);
-      const spenderAddress = contracts[contractName].address;
-      console.log("spenderAddress", spenderAddress);
+      const tokenName = token.name;
+      const contractAddress = getContract(tokenName);
+      console.log("contractAddress", contractAddress);
       const tokenDecimals = await getTokenDecimals(token.name);
-      console.log("tokenDecimals", tokenDecimals);
-      const amountToDeposit = ethers.parseUnits(
-        tokenAmount.toString(),
-        tokenDecimals
-      );
+      const amountToDeposit = tokenAmount
+        ? ethers.parseUnits(tokenAmount, tokenDecimals)
+        : ethers.toBigInt(0);
       console.log("amountToDeposit", amountToDeposit);
 
       if (!address) return;
-      const allowance = await getAllowance(token.name, spenderAddress, address);
+      const allowance = await getAllowance(
+        token.name,
+        contractAddress.address,
+        address
+      );
+
       if (allowance.lt(amountToDeposit)) {
         await approveToken(
           token.name,
-          spenderAddress,
+          contractAddress.address,
           amountToDeposit.toString()
         );
       }
-      await depositToken(
-        address,
-        token.name,
-        amountToDeposit.toString(),
-        contractName
-      );
+      await depositToken(token.name, amountToDeposit.toString(), address);
     } catch (error) {
       console.error("Error depositing token", error);
     }
@@ -130,13 +127,13 @@ const LabTabs = ({
         <TabPanel sx={{ padding: "0", mt: "1rem" }} value="1">
           <TokenBox
             value={tokenValue}
-            onChange={() => {}}
+            onChange={(e: any) => setTokenValue(e?.target?.value)}
             token={token}
             hideDropdownButton={true}
           />
 
           <Button
-            onClick={() => handleAddLiquidity(Number(tokenValue))}
+            onClick={() => handleAddLiquidity(tokenValue?.toString() || "")}
             sx={{ mt: "0.5rem" }}
             fullWidth
             // @ts-ignore
