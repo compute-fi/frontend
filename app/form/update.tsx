@@ -7,7 +7,9 @@ import {
   useWaitForTransaction,
 } from 'wagmi';
 import { abi } from '../contracts/compute-contract-abi';
-import { useDebounce } from './useDebounce'
+import { useDebounce } from './useDebounce';
+import '../styles/styles/styles.css'; // Import the CSS file
+
 
 const contractConfig = {
   address: '0x2f5789DC7615a532881ed67D6731dC54A5e8FE77',
@@ -42,15 +44,15 @@ const UpdateForm = () => {
 
 return(
     <>
-    <p>
-        Update these info on contract.
-    </p>
-<form
-      onSubmit={(e) => {
-        e.preventDefault()
-        write?.()
-      }}
-    >
+<div className="glass-container">
+  <h1 className="update">
+    Update these info on contract.
+  </h1>
+
+  <form onSubmit={(e) => {
+    e.preventDefault();
+    write?.();
+  }} className="glass-form">
     <label htmlFor="computeID">Enter the Compute ID</label>
     <input
       id="computeID"
@@ -68,7 +70,7 @@ return(
     />
     <br/>
    
-   <label htmlFor="logCID">Enter the Log CID</label>
+    <label htmlFor="logCID">Enter the Log CID</label>
     <input
       id="logCID"
       onChange={(e) => setLogCID(e.target.value)}
@@ -85,21 +87,27 @@ return(
     />
     <br/>
    
-      <button disabled={!write || isLoading}>
-        {isLoading ? 'Adding Compute Data...' : 'Add Data'}
-      </button>
-      {isSuccess && (
+    <button disabled={!write || isLoading} className="glass-button">
+      {isLoading ? 'Adding Compute Data...' : 'Add Data'}
+    </button>
+
+    {isSuccess && (
+      <div className="glass-message">
+        Successfully added Compute Info!
         <div>
-          Successfully added Compute Info! 
-          <div>
-            <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan </a>{data?.hash}
-          </div>
+          <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan </a>{data?.hash}
         </div>
-      )}
-      {(isPrepareError || isError) && (
-        <div>Error: {(prepareError || error)?.message}</div>
-      )}
-    </form>
+      </div>
+    )}
+
+    {(isPrepareError || isError) && (
+      <div className="glass-error">
+        Error: {(prepareError || error)?.message}
+      </div>
+    )}
+  </form>
+</div>
+
     </>
 )
 }

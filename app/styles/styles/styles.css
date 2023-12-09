@@ -1,0 +1,103 @@
+.glass-container {
+  background: rgba(0, 255, 255, 0.4); /* Cyan tint */
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 255, 255, 0.3); /* Cyan shadow */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 255, 255, 0.5); /* Cyan border */
+  padding: 20px;
+}
+
+.log-cid {
+  margin: 12px 0 24px;
+  color: #fff; /* White text */
+  text-align:center;
+}
+.compute-id {
+  margin: 12px 0 24px;
+  color: #fff; /* White text */
+  text-align:center;
+}
+.status {
+  margin: 12px 0 24px;
+  color: #fff; /* White text */
+  text-align:center;
+}
+.add {
+  margin: 12px 0 24px;
+  color: #fff; /* White text */
+  text-align:center;
+}
+.update {
+  margin: 12px 0 24px;
+  color: #fff; /* White text */
+  text-align:center;
+}
+
+.glass-form {
+  margin-top: 20px;
+}
+
+.glass-form label {
+  display: block;
+  margin-bottom: 10px;
+  color: #fff; /* White text */
+}
+
+.glass-form input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.glass-form button {
+  background: rgba(0, 255, 255, 0.4); /* Cyan tint */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  color: #fff; /* White text */
+}
+
+.glass-form button:disabled {
+  background: rgba(0, 255, 255, 0.2); /* Lighter cyan tint */
+  cursor: not-allowed;
+}
+
+.glass-form button:hover {
+  background: rgba(0, 255, 255, 0.5); /* Darker cyan tint on hover */
+}
+
+.success-message,
+.error-message {
+  margin-top: 20px;
+  background: rgba(0, 255, 255, 0.4); /* Cyan tint */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 10px;
+  color: #fff; /* White text */
+}
+
+.success-message a,
+.error-message a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.refresh-button {
+  margin-top: 20px;
+  background: rgba(0, 255, 255, 0.4); /* Cyan tint */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  color: #fff; /* White text */
+}
+
+.refresh-button:hover {
+  background: rgba(0, 255, 255, 0.5); /* Darker cyan tint on hover */
+}

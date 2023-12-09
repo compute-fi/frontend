@@ -9,6 +9,8 @@ import {
 } from 'wagmi';
 import { abi } from '../contracts/compute-contract-abi';
 import { useDebounce } from './useDebounce'
+import '../styles/styles/styles.css'; // Import the CSS file
+
 
 const contractConfig = {
   address: '0x2f5789DC7615a532881ed67D6731dC54A5e8FE77',
@@ -17,7 +19,7 @@ const contractConfig = {
 
 const ComputeForm = () => {
     const [inputValue, setInputValue] = React.useState("");
-    const [computeID, setcomputeID] = React.useState("null");
+    const [computeID, setcomputeID] = React.useState("");
     const debouncedValue = useDebounce(inputValue, 500);
     console.log(debouncedValue);
 
@@ -58,41 +60,46 @@ const ComputeForm = () => {
     })
 
 return(
-    <>
-                <p style={{ margin: '12px 0 24px' }}>
-                The computeID is {(computeID)}
-            </p>
+  <div className="glass-container">
+  <h1 className="compute-id">{computeID?"Your Compute ID is : "+computeID:"Compute your script/notebook."} 
+</h1>
 
-<form
-      onSubmit={(e) => {
-        e.preventDefault()
-        write?.()
-      }}
-    >
-      <label htmlFor="tokenId">Enter Raw File URL</label>
-      <input
-        id="tokenId"
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder="URL here ...."
-        value={inputValue}
-      />
-      <button disabled={!write || isLoading}>
-        {isLoading ? 'Calling Compute...' : 'Compute'}
-      </button>
-      {isSuccess && (
+  <form onSubmit={(e) => {
+    e.preventDefault();
+    write?.();
+  }} className="glass-form">
+    <label htmlFor="tokenId">Enter Raw File URL</label>
+    <input
+      id="tokenId"
+      onChange={(e) => setInputValue(e.target.value)}
+      placeholder="URL here ...."
+      value={inputValue}
+    />
+    <button disabled={!write || isLoading} className="glass-button">
+      {isLoading ? 'Calling Compute...' : 'Compute'}
+    </button>
+
+    {isSuccess && (
+      <div className="glass-message">
+        Successfully initiated. Please refresh ComputeID!
         <div>
-          Successfully initiated. Please refresh ComputeID! 
-          <div>
-            <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan </a>{data?.hash}
-          </div>
+          <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan </a>{data?.hash}
         </div>
-      )}
-      {(isPrepareError || isError) && (
-        <div>Error: {(prepareError || error)?.message}</div>
-      )}
-    </form>
-    <button onClick={refreshComputeID}>Refresh for new compute ID</button>
-    </>
+      </div>
+    )}
+
+    {(isPrepareError || isError) && (
+      <div className="glass-error">
+        Error: {(prepareError || error)?.message}
+      </div>
+    )}
+  </form>
+
+  <button onClick={refreshComputeID} className="refresh-button">
+    Refresh for new compute ID
+  </button>
+</div>
+
 )
 }
 

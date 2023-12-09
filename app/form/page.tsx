@@ -12,8 +12,8 @@ const AllForm = () => {
   <>
     <ComputeForm/>
     <AddForm/>
-    <LogForm/>
     <StatusForm/>
+    <LogForm/>
     <UpdateForm/>
   </>
   );
