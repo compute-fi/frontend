@@ -1,6 +1,12 @@
 export const abi = [
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_nftContractAddress",
+                "type": "address"
+            }
+        ],
         "stateMutability": "nonpayable",
         "type": "constructor"
     },
@@ -41,6 +47,25 @@ export const abi = [
             }
         ],
         "name": "ChainlinkRequested",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "FunctionExecuted",
         "type": "event"
     },
     {
@@ -196,6 +221,11 @@ export const abi = [
                 "internalType": "string",
                 "name": "_fileUrl",
                 "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_tokenId",
+                "type": "uint256"
             }
         ],
         "name": "callAPI",
@@ -475,7 +505,13 @@ export const abi = [
         "type": "function"
     },
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_userwallet",
+                "type": "address"
+            }
+        ],
         "name": "getAllStrings",
         "outputs": [
             {
@@ -506,6 +542,11 @@ export const abi = [
                 "internalType": "uint256",
                 "name": "index",
                 "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_userwallet",
+                "type": "address"
             }
         ],
         "name": "getString",
@@ -514,6 +555,19 @@ export const abi = [
                 "internalType": "string",
                 "name": "",
                 "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "nftContractAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",

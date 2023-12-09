@@ -6,9 +6,10 @@ import {
 } from 'wagmi';
 import { dNFTabi } from '../contracts/dynamic-nft-abi';
 import axios from 'axios';
+import { dNFTAddress } from '../contracts/address';
 
 const contractConfig = {
-  address: '0x2d16Bf21136d3A0C0d4BE06569B01EA0533f80B9',
+  address: dNFTAddress,
   abi: dNFTabi,
 } as const;
 

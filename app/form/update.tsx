@@ -9,10 +9,11 @@ import {
 import { abi } from '../contracts/compute-contract-abi';
 import { useDebounce } from './useDebounce';
 import '../styles/styles/styles.css'; // Import the CSS file
+import { computeContractAddress } from '../contracts/address';
 
 
 const contractConfig = {
-  address: '0x2f5789DC7615a532881ed67D6731dC54A5e8FE77',
+  address: computeContractAddress,
   abi,
 } as const;
 

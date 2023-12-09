@@ -15,9 +15,10 @@ import {
 import { abi } from '../contracts/compute-contract-abi';
 import Link from 'next/link';
 import { Button } from '@mui/material';
+import { computeContractAddress } from '../contracts/address';
 
 const contractConfig = {
-  address: '0xa700beF0B99be1330D2B75733030981a6EEd66eB',
+  address: computeContractAddress,
   abi,
 } as const;
 
