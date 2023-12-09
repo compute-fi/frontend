@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -22,6 +23,9 @@ import React from "react";
 import PoolItem from "../components/PoolItem";
 import { pool } from "@/constants";
 import PoolModal from "../components/PoolModal";
+import { useAccount, useConfig } from "wagmi";
+import { getTokenBalance } from "@/services/ContractService";
+import { ethers } from "ethers";
 
 export interface Token {
   name: string;
@@ -118,7 +122,11 @@ const FilterButton = ({
 const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
   const [searchValue, setSearchValue] = React.useState("");
   const [selectedToken, setSelectedToken] = React.useState<Token | null>(null);
+  const [tokenBalances, setTokenBalances] = useState<{ [key: string]: number }>(
+    {}
+  );
   const [open, setOpen] = React.useState(false);
+  const { address } = useAccount();
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -127,6 +135,20 @@ const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
     setSelectedToken(token);
     setOpen(true);
   };
+
+  useEffect(() => {
+    if (!address) return;
+    const fetchTokenBalances = async () => {
+      const balances: { [key: string]: number } = {};
+      for (const token of pool.tokens) {
+        const balance = await getTokenBalance(address, token.name);
+        balances[token.name] = Number(balance);
+      }
+      setTokenBalances(balances);
+      console.log("Token balances", tokenBalances);
+    };
+    fetchTokenBalances();
+  }, []);
 
   return (
     <Box m="20px">
@@ -249,10 +271,11 @@ const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
         <Grid container spacing={2}>
           {pool?.tokens?.map(token => (
             <PoolItem
-              key={token.address}
+              key={token.name}
               filter={filter}
               onAddLiquidityClick={onAddLiquidityClick}
               token={token}
+              balance={tokenBalances[token.name]}
             />
           ))}
           <Dialog
@@ -275,6 +298,7 @@ const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
               <PoolModal
                 token={selectedToken as Token}
                 liquidityToken={0}
+                balance={tokenBalances[selectedToken?.name as string]}
                 onAddLiquidity={() => {}}
                 onRemoveLiquidity={() => {}}
               />

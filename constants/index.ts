@@ -38,6 +38,8 @@ export type TokenType = {
   userLiquidity: number;
   maxAllowance?: string;
   abi?: any;
+  balances?: number | string;
+  contractName?: string;
 };
 
 export type PoolType = {
@@ -56,16 +58,17 @@ export const pool: PoolType = {
     {
       name: "USDT",
       icon: cTokenUsdt,
-      usdValue: 1.0,
+      usdValue: 0.0,
       amount: 0.0,
       category: "USDT",
       address: "0x79C950C7446B234a6Ad53B908fBF342b01c4d446",
       tvl: "$0.00",
-      maxApr: "0.00%",
+      maxApr: "391.82%",
       userLiquidity: 0.0,
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: ERC20ABI,
+      contractName: "compoundUSDT",
     },
     {
       name: "COMP",
@@ -75,11 +78,12 @@ export const pool: PoolType = {
       category: "COMP",
       address: "0x3587b2F7E0E2D6166d6C14230e7Fe160252B0ba4",
       tvl: "$0.00",
-      maxApr: "0.00%",
+      maxApr: "58.50%",
       userLiquidity: 0.0,
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: ERC20ABI,
+      contractName: "compoundCOMP",
     },
     {
       name: "ETH",
@@ -89,11 +93,12 @@ export const pool: PoolType = {
       category: "ETH",
       address: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
       tvl: "$0.00",
-      maxApr: "0.00%",
+      maxApr: "13.24%",
       userLiquidity: 0.0,
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: WETHABI,
+      contractName: "compoundETH",
     },
     {
       name: "DAI",
@@ -103,11 +108,12 @@ export const pool: PoolType = {
       category: "DAI",
       address: "0x2899a03ffDab5C90BADc5920b4f53B0884EB13cC",
       tvl: "$0.00",
-      maxApr: "0.00%",
+      maxApr: "287.17%",
       userLiquidity: 0.0,
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: ERC20ABI,
+      contractName: "compoundDAI",
     },
     {
       name: "UNI",
@@ -117,11 +123,12 @@ export const pool: PoolType = {
       category: "UNI",
       address: "0x208F73527727bcB2D9ca9bA047E3979559EB08cC",
       tvl: "$0.00",
-      maxApr: "0.00%",
+      maxApr: "5696.07%",
       userLiquidity: 0.0,
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: ERC20ABI,
+      contractName: "compoundUNI",
     },
     {
       name: "stETH",
@@ -131,11 +138,12 @@ export const pool: PoolType = {
       category: "stETH",
       address: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
       tvl: "$0.00",
-      maxApr: "0.00%",
+      maxApr: "8.00%",
       userLiquidity: 0.0,
       maxAllowance:
         "115792089237316195423570985008687907853269984665640564039457584007913129639935",
       abi: WETHABI,
+      contractName: "lido",
     },
   ],
 };
@@ -167,4 +175,4 @@ export const contracts: contractType = {
   },
 };
 
-export const GAS_LIMIT = ethers.hexlify("1_000_000");
+// export const GAS_LIMIT = ethers.hexlify("1_000_000");

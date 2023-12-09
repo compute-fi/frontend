@@ -47,9 +47,11 @@ const PoolItem = ({
   token,
   onAddLiquidityClick,
   filter,
+  balance,
 }: {
   token: Token;
   filter: Filter;
+  balance: number | string;
   onAddLiquidityClick: (token: Token) => void;
 }) => {
   const theme = useTheme();
@@ -104,24 +106,32 @@ const PoolItem = ({
             marginBottom: "24px",
           }}
         >
-          <Grid item xs={6}>
+          {/* <Grid item xs={6}>
             <Typography sx={descriptionHeader}>TVL</Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography sx={descriptionContent}>{token.tvl}</Typography>
-          </Grid>
+          </Grid> */}
           <Grid item xs={6}>
-            <Typography sx={descriptionHeader}>Max APR</Typography>
+            <Typography sx={descriptionHeader}>APY</Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography sx={descriptionContent}>{token.maxApr}</Typography>
           </Grid>
-          <Grid item xs={6} display={filter == "MY" ? "block" : "none"}>
+          <Grid item xs={6}>
             <Typography sx={descriptionHeader}>My Liquidity</Typography>
           </Grid>
-          <Grid item xs={6} display={filter == "MY" ? "block" : "none"}>
+          <Grid item xs={6}>
             <Typography sx={descriptionContent}>
               {token.userLiquidity}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography sx={descriptionHeader}>Balance</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography sx={descriptionContent}>
+              {typeof balance === "number" ? balance.toFixed(2) : "Loading..."}
             </Typography>
           </Grid>
         </Grid>

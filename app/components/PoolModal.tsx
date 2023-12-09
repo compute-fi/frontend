@@ -16,6 +16,17 @@ import { TokenBox } from "./TokenBox";
 import { Token } from "../pools/page";
 import { Button } from "./Button";
 import Image from "next/image";
+import { useAccount } from "wagmi";
+import {
+  depositToken,
+  getAllowance,
+  approveToken,
+  getToken,
+  getTokenDecimals,
+} from "@/services/ContractService";
+import { contracts } from "@/constants";
+import { ethers } from "ethers";
+import { getContract } from "viem";
 
 type Data = number[];
 
@@ -34,6 +45,7 @@ const LabTabs = ({
 }: LabTabProps) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { address } = useAccount();
   const [value, setValue] = useState("1");
   const [tokenValue, setTokenValue] = useState<string | undefined>(undefined);
 
@@ -53,6 +65,40 @@ const LabTabs = ({
       boxShadow: "none",
     },
     width: "200px",
+  };
+
+  const handleAddLiquidity = async (tokenAmount: number) => {
+    try {
+      const contractName = token.name;
+      console.log("contractName", contractName);
+      const spenderAddress = contracts[contractName].address;
+      console.log("spenderAddress", spenderAddress);
+      const tokenDecimals = await getTokenDecimals(token.name);
+      console.log("tokenDecimals", tokenDecimals);
+      const amountToDeposit = ethers.parseUnits(
+        tokenAmount.toString(),
+        tokenDecimals
+      );
+      console.log("amountToDeposit", amountToDeposit);
+
+      if (!address) return;
+      const allowance = await getAllowance(token.name, spenderAddress, address);
+      if (allowance.lt(amountToDeposit)) {
+        await approveToken(
+          token.name,
+          spenderAddress,
+          amountToDeposit.toString()
+        );
+      }
+      await depositToken(
+        address,
+        token.name,
+        amountToDeposit.toString(),
+        contractName
+      );
+    } catch (error) {
+      console.error("Error depositing token", error);
+    }
   };
 
   return (
@@ -90,7 +136,7 @@ const LabTabs = ({
           />
 
           <Button
-            onClick={() => onAddLiquidity(Number(tokenValue))}
+            onClick={() => handleAddLiquidity(Number(tokenValue))}
             sx={{ mt: "0.5rem" }}
             fullWidth
             // @ts-ignore
@@ -124,6 +170,7 @@ const LabTabs = ({
 interface PoolLiquidityProps {
   token: Token;
   liquidityToken: number;
+  balance: string | number;
   onAddLiquidity: (tokenAmount: number) => void;
   onRemoveLiquidity: (liquidityTokenAmount: number) => void;
 }
@@ -131,9 +178,11 @@ interface PoolLiquidityProps {
 const PoolModal = ({
   token,
   liquidityToken,
+  balance,
   onAddLiquidity,
   onRemoveLiquidity,
 }: PoolLiquidityProps) => {
+  const { address } = useAccount();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
@@ -183,7 +232,9 @@ const PoolModal = ({
                   {token?.name}
                 </Typography>
                 <Typography sx={{ fontWeight: 700, fontSize: "1.125rem" }}>
-                  {liquidityToken}
+                  {typeof balance === "number"
+                    ? balance.toFixed(2)
+                    : "Loading..."}
                 </Typography>
               </Box>
             </Box>

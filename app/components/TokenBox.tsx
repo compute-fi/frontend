@@ -68,13 +68,6 @@ const AssetButton = ({
         alt={token?.name}
       />
       {token?.name}
-      <Box
-        component={"img"}
-        src="/CaretDown.svg"
-        sx={{
-          display: hideDropdownButton ? "none" : "block",
-        }}
-      />
     </Button>
   );
 };
