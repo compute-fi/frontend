@@ -1,18 +1,12 @@
-"use client";
+
 import * as React from 'react';
 import {
-  useAccount,
+  useAccount,   
   useContractRead,
-  useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
 } from 'wagmi';
 import { dNFTabi } from '../contracts/dynamic-nft-abi';
 import axios from 'axios';
-import { useDebounce } from './useDebounce'
 import { dNFTAddress } from '../contracts/address';
-import '../styles/styles/styles.css'; // Import the CSS file
-import '../styles/styles/nft.css'; // Import the CSS file
 
 const contractConfig = {
   address: dNFTAddress,
@@ -23,7 +17,7 @@ const contractConfig = {
 import NFTlevel from "./NFTlevel";
 import ComputeBalance from "./ComputeBalance";
 import NFTimage from "./NFTimage";
-import { Grid } from '@mui/material';
+import { Button, Grid, Link } from '@mui/material';
 import { gridSpacing } from './store/constant';
 
 async function getImageUrl(url: string) {
@@ -43,7 +37,7 @@ async function getImageUrl(url: string) {
       }
   }
   
-const Mint = () => {
+const PageHead = () => {
     const [tokenURI, setTokenURI] = React.useState("");
     const [level, setLevel] = React.useState("");
     const [balance, setBalance] = React.useState("");
@@ -89,31 +83,11 @@ const Mint = () => {
     React.useEffect(() => {
       fetchData();
     }, []);
-
-    const [inputValue, setInputValue] = React.useState("");
-    const debouncedValue = useDebounce(inputValue, 500);
-    console.log(debouncedValue);
-
-    const { isConnected } = useAccount();
-
-    const { config: contractWriteConfig, error: prepareError,
-      isError: isPrepareError, } = usePrepareContractWrite({
-      ...contractConfig,
-      functionName: 'publicMint',
-      value: BigInt(1000000000000000),
-      // args: [parseInt(debouncedValue)],
-      // enabled: Boolean(debouncedValue),
-    });
-    
-    const { data, error, isError, write } = useContractWrite(contractWriteConfig)
- 
-    const { isLoading, isSuccess } = useWaitForTransaction({
-      hash: data?.hash,
-    })
     
     return (
       <>
-        {/* <Grid item xs={8}>
+      
+        <Grid item xs={8}>
           <Grid container spacing={gridSpacing}>
             <Grid item lg={4} md={6} sm={6} xs={12}>
               <NFTimage url={imgUrl}/>
@@ -125,61 +99,10 @@ const Mint = () => {
               <ComputeBalance balance={balance}/>
             </Grid>
           </Grid>
-        </Grid> */}
-
-<div className="glass-container">
-  <div className="left-section">
-    <NFTimage url={imgUrl} />
-  </div>
-  
-  <div className="right-section">
-    <div>
-      <NFTlevel level={level} />
-    </div>
-    <div>
-      <ComputeBalance balance={balance} />
-    </div>
-  </div>
-</div>
-
-
-
-
-        <div className="glass-container">
-  <form onSubmit={(e) => {
-    e.preventDefault();
-    write?.();
-  }} className="glass-form">
-    <label htmlFor="tokenId">Enter 0.001+ Ethers</label>
-    <input
-      id="tokenId"
-      onChange={(e) => setInputValue(e.target.value)}
-      placeholder="Eth value here ...."
-      value={inputValue}
-    />
-    <button disabled={!write || isLoading} className="glass-button">
-      {isLoading ? 'Calling public Mint...' : 'Mint NFT'}
-    </button>
-
-    {isSuccess && (
-      <div className="glass-message">
-        Successfully Minted!
-        <div>
-          <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan </a>{data?.hash}
-        </div>
-      </div>
-    )}
-
-    {(isPrepareError || isError) && (
-      <div className="glass-error">
-        Error: {(prepareError || error)?.message}
-      </div>
-    )}
-  </form>
-</div>
-
+        </Grid>
+        
       </>
     );
   };
   
-  export default Mint;
+  export default PageHead;

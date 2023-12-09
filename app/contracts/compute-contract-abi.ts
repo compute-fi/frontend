@@ -1,6 +1,12 @@
 export const abi = [
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_nftContractAddress",
+                "type": "address"
+            }
+        ],
         "stateMutability": "nonpayable",
         "type": "constructor"
     },
@@ -41,6 +47,25 @@ export const abi = [
             }
         ],
         "name": "ChainlinkRequested",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "FunctionExecuted",
         "type": "event"
     },
     {
@@ -141,9 +166,9 @@ export const abi = [
             },
             {
                 "indexed": true,
-                "internalType": "bytes32",
+                "internalType": "string",
                 "name": "transactionHash",
-                "type": "bytes32"
+                "type": "string"
             },
             {
                 "indexed": true,
@@ -170,13 +195,8 @@ export const abi = [
                 "type": "string"
             },
             {
-                "internalType": "uint256",
-                "name": "_computeTime",
-                "type": "uint256"
-            },
-            {
                 "internalType": "string",
-                "name": "_logCID",
+                "name": "_transactionHash",
                 "type": "string"
             }
         ],
@@ -201,6 +221,11 @@ export const abi = [
                 "internalType": "string",
                 "name": "_fileUrl",
                 "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_tokenId",
+                "type": "uint256"
             }
         ],
         "name": "callAPI",
@@ -360,9 +385,9 @@ export const abi = [
                 "type": "string"
             },
             {
-                "internalType": "bytes32",
+                "internalType": "string",
                 "name": "transactionHash",
-                "type": "bytes32"
+                "type": "string"
             },
             {
                 "internalType": "address",
@@ -480,8 +505,64 @@ export const abi = [
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_userwallet",
+                "type": "address"
+            }
+        ],
+        "name": "getAllStrings",
+        "outputs": [
+            {
+                "internalType": "string[]",
+                "name": "",
+                "type": "string[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "getChainlinkToken",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_userwallet",
+                "type": "address"
+            }
+        ],
+        "name": "getString",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "nftContractAddress",
         "outputs": [
             {
                 "internalType": "address",
@@ -522,6 +603,30 @@ export const abi = [
         "inputs": [
             {
                 "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "stringArrays",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
                 "name": "to",
                 "type": "address"
             }
@@ -547,6 +652,11 @@ export const abi = [
                 "internalType": "string",
                 "name": "_logCID",
                 "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_computeTime",
+                "type": "uint256"
             }
         ],
         "name": "updateTransaction",

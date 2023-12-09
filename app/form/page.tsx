@@ -1,17 +1,22 @@
 "use client";
-import * as React from 'react';
-import ComputeForm from './compute';
-import StatusForm from './status';
-import LogForm from './log';
+import React from "react";
+import ComputeForm from "./compute";
+import LogForm from "./log";
+import StatusForm from "./status";
+import AddForm from "./add";
+import UpdateForm from "./update";
 
-const TestForm = () => {
-    return (
-        <>
-        <ComputeForm/>
-        <StatusForm/>
-        <LogForm/>
-        </>
-    )
-}
 
-export default TestForm;
+const AllForm = () => {
+  return (
+  <>
+    <ComputeForm/>
+    <AddForm/>
+    <StatusForm/>
+    <LogForm/>
+    <UpdateForm/>
+  </>
+  );
+};
+
+export default AllForm;

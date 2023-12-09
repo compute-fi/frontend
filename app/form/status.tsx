@@ -8,15 +8,18 @@ import {
 } from 'wagmi';
 import { abi } from '../contracts/compute-contract-abi';
 import { useDebounce } from './useDebounce'
+import '../styles/styles/styles.css'; // Import the CSS file
+import { computeContractAddress } from '../contracts/address';
+
 
 const contractConfig = {
-  address: '0xfF9aa21FC6aA2fEae61cC776f3F2B23f0Ad5dE4e',
+  address: computeContractAddress,
   abi,
 } as const;
 
 const StatusForm = () => {
     const [inputValue, setInputValue] = React.useState("");
-    const [Status, setStatus] = React.useState("null");
+    const [Status, setStatus] = React.useState("");
     const debouncedValue = useDebounce(inputValue, 500);
     console.log(debouncedValue);
 
@@ -57,41 +60,46 @@ const StatusForm = () => {
     })
 
 return(
-    <>
-                <p style={{ margin: '12px 0 24px' }}>
-                The Status is {(Status)}
-            </p>
+<div className="glass-container">
+  <h1 className="status">{Status?"Your Compute status is : "+Status:"Check your compute status here."} 
+</h1>
 
-<form
-      onSubmit={(e) => {
-        e.preventDefault()
-        write?.()
-      }}
-    >
-      <label htmlFor="tokenId">Enter the Compute ID</label>
-      <input
-        id="tokenId"
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder="ComputeID here..."
-        value={inputValue}
-      />
-      <button disabled={!write || isLoading}>
-        {isLoading ? 'Checking Status...' : 'Check Status'}
-      </button>
-      {isSuccess && (
+  <form onSubmit={(e) => {
+    e.preventDefault();
+    write?.();
+  }} className="glass-form">
+    <label htmlFor="tokenId">Enter the Compute ID</label>
+    <input
+      id="tokenId"
+      onChange={(e) => setInputValue(e.target.value)}
+      placeholder="ComputeID here..."
+      value={inputValue}
+    />
+    <button disabled={!write || isLoading} className="glass-button">
+      {isLoading ? 'Checking Status...' : 'Check Status'}
+    </button>
+
+    {isSuccess && (
+      <div className="glass-message">
+        Successfully initiated. Please refresh Status!
         <div>
-          Successfully initiated. Please refresh Status! 
-          <div>
-            <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
-          </div>
+          <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
         </div>
-      )}
-      {(isPrepareError || isError) && (
-        <div>Error: {(prepareError || error)?.message}</div>
-      )}
-    </form>
-    <button onClick={refreshStatus}>Refresh for new Status</button>
-    </>
+      </div>
+    )}
+
+    {(isPrepareError || isError) && (
+      <div className="glass-error">
+        Error: {(prepareError || error)?.message}
+      </div>
+    )}
+  </form>
+
+  <button onClick={refreshStatus} className="refresh-button">
+    Refresh for new Status
+  </button>
+</div>
+
 )
 }
 

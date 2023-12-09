@@ -8,15 +8,18 @@ import {
 } from 'wagmi';
 import { abi } from '../contracts/compute-contract-abi';
 import { useDebounce } from './useDebounce'
+import '../styles/styles/styles.css'; // Import the CSS file
+import { computeContractAddress } from '../contracts/address';
+
 
 const contractConfig = {
-  address: '0xfF9aa21FC6aA2fEae61cC776f3F2B23f0Ad5dE4e',
+  address: computeContractAddress,
   abi,
 } as const;
 
 const LogForm = () => {
     const [inputValue, setInputValue] = React.useState("");
-    const [logCID, setlogCID] = React.useState("null");
+    const [logCID, setlogCID] = React.useState("");
     const debouncedValue = useDebounce(inputValue, 500);
     console.log(debouncedValue);
 
@@ -57,41 +60,46 @@ const LogForm = () => {
     })
 
 return(
-    <>
-                <p style={{ margin: '12px 0 24px' }}>
-                The logCID is {(logCID)}
-            </p>
+<div className="glass-container">
+  <h1 className="log-cid">{logCID?"Your Log CID is : "+logCID:"Get your Logs here."} 
+</h1>
 
-<form
-      onSubmit={(e) => {
-        e.preventDefault()
-        write?.()
-      }}
-    >
-      <label htmlFor="tokenId">Enter Compute ID</label>
-      <input
-        id="tokenId"
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder="Compute ID here..."
-        value={inputValue}
-      />
-      <button disabled={!write || isLoading}>
-        {isLoading ? 'Checking log...' : 'Get Log'}
-      </button>
-      {isSuccess && (
+  <form onSubmit={(e) => {
+    e.preventDefault();
+    write?.();
+  }} className="glass-form">
+    <label htmlFor="tokenId">Enter Compute ID</label>
+    <input
+      id="tokenId"
+      onChange={(e) => setInputValue(e.target.value)}
+      placeholder="Compute ID here..."
+      value={inputValue}
+    />
+    <button disabled={!write || isLoading}>
+      {isLoading ? 'Checking log...' : 'Get Log'}
+    </button>
+
+    {isSuccess && (
+      <div className="success-message">
+        Successfully initiated. Please refresh logCID!
         <div>
-          Successfully initiated. Please refresh logCID! 
-          <div>
-            <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
-          </div>
+          <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
         </div>
-      )}
-      {(isPrepareError || isError) && (
-        <div>Error: {(prepareError || error)?.message}</div>
-      )}
-    </form>
-    <button onClick={refreshlogCID}>Refresh for new logCID</button>
-    </>
+      </div>
+    )}
+
+    {(isPrepareError || isError) && (
+      <div className="error-message">
+        Error: {(prepareError || error)?.message}
+      </div>
+    )}
+  </form>
+
+  <button className="refresh-button" onClick={refreshlogCID}>
+    Refresh for new logCID
+  </button>
+</div>
+
 )
 }
 

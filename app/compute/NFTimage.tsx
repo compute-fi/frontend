@@ -11,12 +11,24 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
 }));
 
-export default function NFTimage() {
-    return (
-      <>
-    <Stack direction="row" spacing={2}>
-      <DemoPaper square={false}>NFTImage</DemoPaper>
-    </Stack>
-      </>
-    );
-  }
+interface NFTimageProps {
+  url: string;
+}
+
+const NFTimage: React.FC<NFTimageProps> = ({ url }) => {
+  return (
+    <>
+      <Stack direction="row" spacing={2}>
+        <DemoPaper square={false}>
+        <img
+            src={url}
+            alt="NFT"
+            style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+          />
+        </DemoPaper>
+      </Stack>
+    </>
+  );
+};
+
+export default NFTimage;

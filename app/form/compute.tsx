@@ -9,16 +9,23 @@ import {
 } from 'wagmi';
 import { abi } from '../contracts/compute-contract-abi';
 import { useDebounce } from './useDebounce'
+import '../styles/styles/styles.css'; // Import the CSS file
+import { computeContractAddress } from '../contracts/address';
+import Link from 'next/link';
+
+
 
 const contractConfig = {
-  address: '0xfF9aa21FC6aA2fEae61cC776f3F2B23f0Ad5dE4e',
+  address: computeContractAddress,
   abi,
 } as const;
 
 const ComputeForm = () => {
-    const [inputValue, setInputValue] = React.useState("");
-    const [computeID, setcomputeID] = React.useState("null");
-    const debouncedValue = useDebounce(inputValue, 500);
+  const [inputValue, setInputValue] = React.useState("");
+  const [tokenID, setTokenID] = React.useState("");
+  const [computeID, setcomputeID] = React.useState("");
+  const debouncedValue = useDebounce(inputValue, 500);
+  const debouncedValue2 = useDebounce(tokenID, 500);
     console.log(debouncedValue);
 
     const { isConnected } = useAccount();
@@ -27,7 +34,7 @@ const ComputeForm = () => {
       isError: isPrepareError, } = usePrepareContractWrite({
       ...contractConfig,
       functionName: 'callAPI',
-      args: ["0x33238F4C8C5C71E1A7a2802e290079665f532FbA","aa491301949d4a4e93d460bdf12c372f",debouncedValue.toString()],
+      args: ["0x33238F4C8C5C71E1A7a2802e290079665f532FbA","aa491301949d4a4e93d460bdf12c372f",debouncedValue.toString(),parseInt(debouncedValue2)],
       enabled: Boolean(debouncedValue),
     });
     const { data: currentcomputeID } = useContractRead({
@@ -58,41 +65,56 @@ const ComputeForm = () => {
     })
 
 return(
-    <>
-                <p style={{ margin: '12px 0 24px' }}>
-                The computeID is {(computeID)}
-            </p>
+  <div className="glass-container">
+  <h1 className="compute-id">{computeID?"Your Compute ID is : "+computeID:"Compute your script/notebook."} 
+</h1>
+<p>Requirements:</p>
+<ul>1. Make sure you have deposited some eth to this compute <Link href={'https://goerli.etherscan.io/address/0x0Bc19dF8279244Bf643c6F9752C36f10d1b4642c'} target="_blank">contract</Link></ul>
+<ul>2. Make sure you have minted this <Link href={'/mint'} target="_blank">dNFT</Link></ul>
 
-<form
-      onSubmit={(e) => {
-        e.preventDefault()
-        write?.()
-      }}
-    >
-      <label htmlFor="tokenId">Enter Raw File URL</label>
-      <input
-        id="tokenId"
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder="URL here ...."
-        value={inputValue}
-      />
-      <button disabled={!write || isLoading}>
-        {isLoading ? 'Calling Compute...' : 'Compute'}
-      </button>
-      {isSuccess && (
+  <form onSubmit={(e) => {
+    e.preventDefault();
+    write?.();
+  }} className="glass-form">
+  <label htmlFor="computeId">Enter Raw File URL</label>
+  <input
+    id="computeId"
+    onChange={(e) => setInputValue(e.target.value)}
+    placeholder="URL here ...."
+    value={inputValue}
+  />
+  <label htmlFor="tokenId">Enter NFT token ID</label>
+  <input
+    id="tokenId"
+    onChange={(e) => setTokenID(e.target.value)}
+    placeholder="NFT Token ID here to Verify ...."
+    value={tokenID}
+  />
+    <button disabled={!write || isLoading} className="glass-button">
+      {isLoading ? 'Calling Compute...' : 'Compute'}
+    </button>
+
+    {isSuccess && (
+      <div className="glass-message">
+        Successfully initiated. Please refresh ComputeID!
         <div>
-          Successfully initiated. Please refresh ComputeID! 
-          <div>
-            <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
-          </div>
+          <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan </a>{data?.hash}
         </div>
-      )}
-      {(isPrepareError || isError) && (
-        <div>Error: {(prepareError || error)?.message}</div>
-      )}
-    </form>
-    <button onClick={refreshComputeID}>Refresh for new compute ID</button>
-    </>
+      </div>
+    )}
+
+    {(isPrepareError || isError) && (
+      <div className="glass-error">
+        Error: {(prepareError || error)?.message}
+      </div>
+    )}
+  </form>
+
+  <button onClick={refreshComputeID} className="refresh-button">
+    Refresh for new compute ID
+  </button>
+</div>
+
 )
 }
 
