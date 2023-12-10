@@ -124,7 +124,7 @@ const FilterButton = ({
   );
 };
 
-const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
+const Pools = ({ filter, sort, onSortSelect, onFilterClick }: any) => {
   const [searchValue, setSearchValue] = React.useState("");
   const [selectedToken, setSelectedToken] = React.useState<Token | null>(null);
   const [tokenBalances, setTokenBalances] = useState<{ [key: string]: number }>(

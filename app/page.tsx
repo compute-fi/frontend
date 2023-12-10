@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Dashboard from "./dashboard/page";
+import Pools from "./pools/page";
 
 export default function Home() {
   return (
     <div>
       <main>
-        <Dashboard />
+        <Pools />
       </main>
     </div>
   );
