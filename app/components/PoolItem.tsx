@@ -49,11 +49,13 @@ const PoolItem = ({
   onAddLiquidityClick,
   filter,
   balance,
+  liquidityToken,
 }: {
   token: Token;
   filter: Filter;
   balance: number | string;
   onAddLiquidityClick: (token: Token) => void;
+  liquidityToken: number | string;
 }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -123,9 +125,13 @@ const PoolItem = ({
             <Typography sx={descriptionHeader}>My Liquidity</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography sx={descriptionContent}>
-              {token.userLiquidity}
-            </Typography>
+            {token.name === "stETH" ? (
+              <Typography sx={descriptionContent}>{liquidityToken}</Typography>
+            ) : (
+              <Typography sx={descriptionContent}>
+                {token.userLiquidity}
+              </Typography>
+            )}
           </Grid>
           <Grid item xs={6}>
             <Typography sx={descriptionHeader}>Balance</Typography>

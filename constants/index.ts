@@ -145,27 +145,27 @@ export const pool: PoolType = {
 export const contracts: contractType = {
   compoundUSDT: {
     address: "0xe4e0956B7445E9942E71FEc7C6B2031ba9396b36",
-    abi: CompoundUSDTArtifact,
+    abi: CompoundUSDTArtifact.abi,
   },
   compoundDAI: {
     address: "0x6305D8005ea58F59465Af461b2340A7A546cB647",
-    abi: CompoundDAIArtifact,
+    abi: CompoundDAIArtifact.abi,
   },
   compoundUNI: {
     address: "0x0e4875d8685640BB43DEFEaf52E114FCE2176521",
-    abi: CompoundUNIArtifact,
+    abi: CompoundUNIArtifact.abi,
   },
   compoundETH: {
     address: "0xc208fD2512C7C7823e2aAC1Dd2Cf13Ad5B51BCF6",
-    abi: CompoundETHArtifact,
+    abi: CompoundETHArtifact.abi,
   },
   compoundCOMP: {
     address: "0x6AfBF3Ff3118Ce00F2a5DA16A01E8aedF3B6AAE0",
-    abi: CompoundCOMPArtifact,
+    abi: CompoundCOMPArtifact.abi,
   },
   lido: {
-    address: "0x63c1b26b9F844184D145ec6e1d5877aFA27FC256",
-    abi: LidoArtifact,
+    address: "0x01DC8c3212291ca387406968cC9b549c523A0738",
+    abi: LidoArtifact.abi,
   },
 };
 

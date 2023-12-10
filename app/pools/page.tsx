@@ -25,7 +25,11 @@ import PoolItem from "../components/PoolItem";
 import { pool } from "@/constants";
 import PoolModal from "../components/PoolModal";
 import { useAccount, useConfig } from "wagmi";
-import { getTokenBalance } from "@/services/ContractService";
+import {
+  getTokenBalance,
+  getEthTokenBalance,
+  getEthContractBalance,
+} from "@/services/ContractService";
 import { ethers } from "ethers";
 
 // export interface Token {
@@ -126,6 +130,7 @@ const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
   const [tokenBalances, setTokenBalances] = useState<{ [key: string]: number }>(
     {}
   );
+  const [ethContractBalance, setEthContractBalance] = useState<number>(0);
   const [open, setOpen] = React.useState(false);
   const { address } = useAccount();
 
@@ -142,6 +147,11 @@ const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
     const fetchTokenBalances = async () => {
       const balances: { [key: string]: number } = {};
       for (const token of pool.tokens) {
+        if (token.name == "ETH" || token.name == "stETH") {
+          const balance = await getEthTokenBalance(address);
+          balances[token.name] = Number(balance);
+          continue;
+        }
         const balance = await getTokenBalance(address, token.name);
         balances[token.name] = Number(balance);
       }
@@ -149,6 +159,16 @@ const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
       console.log("Token balances", tokenBalances);
     };
     fetchTokenBalances();
+  }, []);
+
+  useEffect(() => {
+    if (!address) return;
+    const fetchEthContractBalance = async () => {
+      const balance = await getEthContractBalance(address);
+      setEthContractBalance(Number(balance));
+      console.log("Eth contract balance", ethContractBalance);
+    };
+    fetchEthContractBalance();
   }, []);
 
   return (
@@ -277,6 +297,7 @@ const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
               onAddLiquidityClick={onAddLiquidityClick}
               token={token}
               balance={tokenBalances[token.name]}
+              liquidityToken={ethContractBalance}
             />
           ))}
           <Dialog
@@ -298,7 +319,7 @@ const Pools = ({ filter, sort, onSortSelect, onFilterClick }: PoolsProps) => {
             <DialogContent>
               <PoolModal
                 token={selectedToken as Token}
-                liquidityToken={0}
+                liquidityToken={ethContractBalance}
                 balance={tokenBalances[selectedToken?.name as string]}
                 onAddLiquidity={() => {}}
                 onRemoveLiquidity={() => {}}

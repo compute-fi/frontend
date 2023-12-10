@@ -111,8 +111,10 @@ const TokenBox = ({
               disabled={disabled}
               value={value}
               onChange={e => {
-                onChange(String(e.target.value));
-                setUsdPrice(Number(e.target.value) * Number(token?.usdValue));
+                const inputValue = e.target.value;
+                console.log("TokenBox value: ", inputValue);
+                onChange(inputValue);
+                setUsdPrice(Number(inputValue) * Number(token?.usdValue));
               }}
               inputProps={{ min: 0, max: token?.amount }}
               type="number"

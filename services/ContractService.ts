@@ -41,6 +41,24 @@ export const getToken = (tokenName: string) => {
   return new ethers.Contract(token.address, abi, AccountService.getProvider());
 };
 
+export const getEthTokenBalance = async (account: string) => {
+  const provider = AccountService.getProvider();
+  const balance = await provider.getBalance(account);
+  return ethers.formatEther(balance);
+};
+
+export const getEthContractBalance = async (account: string) => {
+  const contract = getContract("stETH");
+  console.log(contract);
+  const contractInstance = new ethers.Contract(
+    contract.address,
+    contract.abi,
+    AccountService.getProvider()
+  );
+  const balance = await contractInstance.balanceOf(account);
+  return ethers.formatEther(balance);
+};
+
 export const getTokenBalance = async (account: string, tokenName: string) => {
   const token = getToken(tokenName);
   const signer = await AccountService.getSigner();
@@ -82,7 +100,7 @@ export const getAllowance = async (
 ) => {
   const token = getToken(tokenName);
   const spenderContract = getContract(spender);
-  const allowance = await token.allowance(owner, spenderContract);
+  const allowance = await token.allowance(owner, spenderContract.address);
   return allowance;
 };
 
@@ -116,5 +134,24 @@ export const depositToken = async (
   );
 
   const tx = await contractInstance.deposit(amount, address);
+  return tx;
+};
+
+export const depositEth = async (amount: string, address: string) => {
+  const contract = getContract("stETH");
+
+  if (!contract) {
+    throw new Error(`Contract ETH not found`);
+  }
+
+  const contractInstance = new ethers.Contract(
+    contract.address,
+    contract.abi,
+    await AccountService.getSigner()
+  );
+
+  const tx = await contractInstance.depositETH(address, {
+    value: ethers.parseEther(amount),
+  });
   return tx;
 };

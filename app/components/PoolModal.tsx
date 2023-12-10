@@ -25,29 +25,24 @@ import {
   getToken,
   getTokenDecimals,
   getContract,
+  depositEth,
 } from "@/services/ContractService";
-import { BigNumberish, ethers, parseUnits } from "ethers";
+import { ethers } from "ethers";
 
 type Data = number[];
 
 interface LabTabProps {
   token: Token;
-  liquidityToken: number;
-  onAddLiquidity: (tokenAmount: number) => void;
-  onRemoveLiquidity: (liquidityTokenAmount: number) => void;
 }
 
-const LabTabs = ({
-  token,
-  liquidityToken,
-  onAddLiquidity,
-  onRemoveLiquidity,
-}: LabTabProps) => {
+const LabTabs = ({ token }: LabTabProps) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { address } = useAccount();
   const [value, setValue] = useState("1");
   const [tokenValue, setTokenValue] = useState<string | undefined>(undefined);
+
+  const tokenValueRef = React.useRef<string | undefined>(undefined);
 
   const buttonStyles = {
     display: "flex",
@@ -70,29 +65,50 @@ const LabTabs = ({
   const handleAddLiquidity = async (tokenAmount: string) => {
     try {
       const tokenName = token.name;
+      console.log("tokenName", tokenName);
       const contractAddress = getContract(tokenName);
       console.log("contractAddress", contractAddress);
       const tokenDecimals = await getTokenDecimals(token.name);
-      const amountToDeposit = tokenAmount
-        ? ethers.parseUnits(tokenAmount, tokenDecimals)
-        : ethers.toBigInt(0);
-      console.log("amountToDeposit", amountToDeposit);
+      // const amountToDeposit = ethers.parseEther(tokenAmount.toString());
+      // console.log("amountToDeposit", amountToDeposit);
+
+      console.log("tokenAmount:", tokenAmount);
+      // const amountToDeposit = tokenAmount.toString();
+      // console.log("amountToDeposit", amountToDeposit);
 
       if (!address) return;
-      const allowance = await getAllowance(
-        token.name,
-        contractAddress.address,
-        address
-      );
+      // const allowance = await getAllowance(
+      //   token.name,
+      //   contractAddress?.address,
+      //   address
+      // );
 
-      if (allowance.lt(amountToDeposit)) {
+      // if (allowance.lt(amountToDeposit)) {
+      //   await approveToken(
+      //     token.name,
+      //     contractAddress.address,
+      //     amountToDeposit.toString()
+      //   );
+      // }
+
+      if (!tokenAmount || typeof tokenAmount !== "string") {
+        console.error("Invalid token amount", tokenAmount);
+        return;
+      }
+
+      // use depositEth for eth
+      if (token.name === "stETH" || token.name === "ETH") {
+        await depositEth(tokenAmount, address);
+        return;
+      } else {
         await approveToken(
           token.name,
           contractAddress.address,
-          amountToDeposit.toString()
+          tokenAmount.toString()
         );
+        await depositToken(token.name, tokenAmount.toString(), address);
       }
-      await depositToken(token.name, amountToDeposit.toString(), address);
+      console.log("Exiting handleAddLiquidity");
     } catch (error) {
       console.error("Error depositing token", error);
     }
@@ -133,7 +149,7 @@ const LabTabs = ({
           />
 
           <Button
-            onClick={() => handleAddLiquidity(tokenValue?.toString() || "")}
+            onClick={() => handleAddLiquidity(tokenValue || "0.1")}
             sx={{ mt: "0.5rem" }}
             fullWidth
             // @ts-ignore
@@ -150,7 +166,7 @@ const LabTabs = ({
             hideDropdownButton={true}
           />
           <Button
-            onClick={() => onRemoveLiquidity(Number(tokenValue))}
+            onClick={() => {}}
             sx={{ mt: "0.5rem" }}
             fullWidth
             // @ts-ignore
@@ -237,12 +253,7 @@ const PoolModal = ({
             </Box>
           </Grid>
         </Grid>
-        <LabTabs
-          token={token}
-          liquidityToken={liquidityToken}
-          onAddLiquidity={onAddLiquidity}
-          onRemoveLiquidity={onRemoveLiquidity}
-        />
+        <LabTabs token={token} />
       </Box>
     </Box>
   );
