@@ -18,8 +18,9 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["*"]
     }
   },
   "include": [
@@ -33,7 +34,9 @@
     ".next/types/**/*.tsx",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "app/components/index.js"
-, "app/compute/TotalIncomeDarkCard.j", "app/compute/ui-component/cards/MainCard.js"  ],
+    "app/components/index.js",
+    "app/compute/TotalIncomeDarkCard.j",
+    "app/compute/ui-component/cards/MainCard.js"
+  ],
   "exclude": ["node_modules"]
 }
