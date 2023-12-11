@@ -10,6 +10,8 @@ Before getting started, ensure you have the following installed:
 
 If you need to install or update Node.js, visit the [official Node.js website](https://nodejs.org/). To install Yarn, run `npm install -g yarn`.
 
+You can setup environment variables from env.sample
+
 ## Getting Started
 
 ### Setting Up the Project
